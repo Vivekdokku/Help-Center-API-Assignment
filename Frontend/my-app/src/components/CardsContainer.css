@@ -1,0 +1,10 @@
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(2, 400px); /* Create 2 columns with a width of 100px each */
+  justify-content: center; /* Center the grid items horizontally */
+  width: 100%;
+  row-gap: 20px;
+  background-color: white;
+  padding-bottom: 30px;
+}
+

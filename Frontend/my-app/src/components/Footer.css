@@ -1,0 +1,38 @@
+/* Footer.css */
+.footer {
+  width: 97.5%;
+  height: 300px;
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  color: white;
+  background-color: black; /* Adjust background color as needed */
+  position: relative; /* Make sure the footer-content is positioned relative to this container */
+}
+
+.Table {
+  height: 100px;
+  width: 100px;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-header {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.footer-content {
+  padding-right: 40px;
+  position: absolute;
+  bottom: 1px; /* Distance from the bottom of the page */
+  right: 1px; /* Distance from the right edge of the page */
+  text-align: right; /* Align text to the right */
+  width: 200px;
+  
+}
+
+footer {
+  position: r; /* Ensure that footer-content is positioned relative to this element */
+}
