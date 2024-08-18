@@ -2,44 +2,39 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cardRoutes = require('./routes/cardRoutes');
 
-// Serve static files
-
-
-
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
 
-
-app.use(express.static('public'));
 // Middleware
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/helpcenter', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+// MongoDB connection using Mongoose
+const url = 'mongodb://localhost:27017/helpCenter';
 
-// Root route
-app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Welcome to the Help Center API!' });
-});
+mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log("Connected successfully to MongoDB server");
 
-// Test route
-app.get('/ping', (req, res) => {
-    res.status(200).json({ message: 'Server is running!' });
-});
+        // Setup routes
+        app.use('/cards', cardRoutes);
 
-// Routes
-app.use('/api', cardRoutes);
+        // Basic route for the home endpoint
+        app.get('/', (req, res) => {
+            res.send('Welcome to the Help Center API');
+        });
+
+        // Start server
+        app.listen(PORT, () => {
+            console.log(`Server is running on http://localhost:${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error("Failed to connect to MongoDB", err);
+    });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    res.status(500).json({ error: err.message });
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+    console.error(err.stack);
+    res.status(500).json({ message: 'Something went wrong!', error: err.message });
 });
