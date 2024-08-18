@@ -1,34 +1,45 @@
-// server.js
-const express = require("express");
-const mongoose = require("mongoose");
+const express = require('express');
+const mongoose = require('mongoose');
+const cardRoutes = require('./routes/cardRoutes');
+
+// Serve static files
+
+
+
 const app = express();
 const port = 3000;
-const cardRoutes = require("./routes/cardRoutes"); // Ensure this line appears only once
 
+
+app.use(express.static('public'));
+// Middleware
+app.use(express.json());
+
+// Connect to MongoDB
 mongoose.connect('mongodb://localhost:27017/helpcenter', {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+    useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.log(err));
 
-app.use(express.json());
-app.use("/api", cardRoutes);
-
-// Basic endpoint to check if the server is running
-app.get("/ping", (req, res) => {
-  res.send("Server is running");
+// Root route
+app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Welcome to the Help Center API!' });
 });
 
-// Add a root route
-app.get("/", (req, res) => {
-  res.send("Welcome to the Help Center API");
+// Test route
+app.get('/ping', (req, res) => {
+    res.status(200).json({ message: 'Server is running!' });
 });
 
-// Error-handling middleware
+// Routes
+app.use('/api', cardRoutes);
+
+// Error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: err.message });
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server running on http://localhost:${port}`);
 });
