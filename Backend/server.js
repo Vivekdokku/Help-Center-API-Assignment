@@ -10,6 +10,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // MongoDB connection using Mongoose
+
+
 const url = 'mongodb://localhost:27017/helpCenter';
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -22,6 +24,10 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
         // Basic route for the home endpoint
         app.get('/', (req, res) => {
             res.send('Welcome to the Help Center API');
+        });
+
+        app.get('/ping', (req, res) => {
+            res.send('Server is running');
         });
 
         // Start server
